@@ -26,6 +26,7 @@ $patients = getPatients();
                         <th>Last Name</th>
                         <th>Married</th>
                         <th>Birth Date</th>
+                        <th>&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,12 +36,12 @@ $patients = getPatients();
                         <td><?= $patient['patientLastName']; ?></td>
                         <td><?= $patient['patientMarried']; ?></td> 
                         <td><?= $patient['patientBirthDate']; ?></td>
+                        <td><a class="btn btn-info" href="index.view.php?action=edit&id=<?= $patient['id'] ?>" style="text-decoration: none;">Edit</a></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
             </table>
             <br />
-            <a href="index.view.php" class="btn btn-primary">Add New Patient</a>
         </div>
     </div>
 </body>
