@@ -95,4 +95,56 @@ function deletePatient($id) {
     return $result;
 }
 
+function login($user, $pass){
+    global $db;
+    
+    $result = [];
+    $stmt = $db->prepare("SELECT * FROM users WHERE username=:user AND password=sha1(:pass)");
+    $stmt->bindValue(':user', $user);
+    $stmt->bindValue(':pass', $pass);
+   
+    if ( $stmt->execute() && $stmt->rowCount() > 0 ) {
+         $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                    
+     }
+     
+     return ($result);
+}
+
+function searchPatients($firstName, $lastName, $isMarried) {
+    global $db;
+    $binds = array();
+
+    $sql = "SELECT * FROM patients WHERE 0=0";
+
+    if ($firstName != "") {
+        $sql .= " AND patientFirstName LIKE :firstName";
+        $binds['firstName'] = '%' . $firstName . '%';
+    }
+
+    if ($lastName != "") {
+        $sql .= " AND patientLastName LIKE :lastName";
+        $binds['lastName'] = '%' . $lastName . '%';
+    }
+
+    if ($isMarried !== '') {
+        $sql .= " AND patientMarried = :isMarried";
+        $binds['isMarried'] = $isMarried;
+    }
+
+    $sql .= " ORDER BY patientLastName, patientFirstName";
+
+    $results = array();
+    $stmt = $db->prepare($sql);
+
+    if ($stmt->execute($binds) && $stmt->rowCount() > 0) {
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    return $results;
+}
+
+
+
+
 ?>
